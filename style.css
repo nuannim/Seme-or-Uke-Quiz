@@ -797,3 +797,30 @@ footer {
     transform: translateY(0);
   }
 }
+
+/* Disclaimer Box (Intro page) */
+.disclaimer-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background-color: rgba(255, 255, 255, 0.75); /* Semi-transparent white for a light blue tint */
+  backdrop-filter: blur(8px); /* Premium glassmorphism blur for text readability */
+  -webkit-backdrop-filter: blur(8px); /* Safari support */
+  border: 1.5px solid var(--color-seme-dark); /* Defined theme dark blue outline */
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-top: 12px;
+  margin-bottom: 28px;
+  font-size: 13px;
+  font-weight: 600; /* Bold/Semi-bold text for maximum readability */
+  color: var(--color-seme-dark); /* High-contrast blue text */
+  line-height: 1.6;
+  text-align: left;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.disclaimer-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--color-seme-dark); /* Matches outline and text blue color */
+}
