@@ -810,8 +810,47 @@ function downloadResultImage() {
     ctx.font = `700 68px ${FONT_TITLE}`;
     ctx.fillText(globalMatchedResult.title, 540, 590);
 
+    // Helper to calculate description lines count
+    const getLinesCount = (text, maxWidth) => {
+      let processedText = text.replace(/<p>/gi, '').replace(/<\/p>/gi, '<br>');
+      if (processedText.endsWith('<br>')) {
+        processedText = processedText.slice(0, -4);
+      }
+      if (processedText.endsWith('<br>"')) {
+        processedText = processedText.slice(0, -5) + '"';
+      }
+      
+      const paragraphs = processedText.split('<br>');
+      let linesCount = 0;
+      paragraphs.forEach((paragraph, index) => {
+        const cleanParagraph = paragraph.replace(/<\/?[^>]+(>|$)/g, "");
+        const chars = cleanParagraph.split('');
+        let line = '';
+        for (let n = 0; n < chars.length; n++) {
+          const testLine = line + chars[n];
+          if (ctx.measureText(testLine).width > maxWidth && n > 0) {
+            linesCount++;
+            line = chars[n];
+          } else {
+            line = testLine;
+          }
+        }
+        linesCount++;
+        if (index < paragraphs.length - 1) {
+          linesCount++; // Paragraph spacer (empty line)
+        }
+      });
+      return linesCount;
+    };
+
+    // Calculate box height dynamically based on description lines count
+    ctx.font = `600 32px ${FONT_TITLE}`;
+    const descText = `"${globalMatchedResult.description}"`;
+    const linesCount = getLinesCount(descText, 700);
+    const boxHeight = 170 + (linesCount * 52); // 130px header height + lines + 40px bottom padding
+
     // 6. Description Box (representing result-description-card)
-    drawRoundRect(140, 660, 800, 380, 24, '#f7f6fb'); // var(--color-bg-base)
+    drawRoundRect(140, 660, 800, boxHeight, 24, '#f7f6fb'); // var(--color-bg-base)
 
     // "คำวิเคราะห์ตัวตน" label inside the description card
     ctx.fillStyle = '#52608c'; // var(--color-text-muted)
@@ -822,7 +861,6 @@ function downloadResultImage() {
     ctx.fillStyle = '#2d395e'; // var(--color-text-main)
     ctx.font = `600 32px ${FONT_TITLE}`;
     const wrapText = (text, x, y, maxWidth, lineHeight) => {
-      // Normalize <p> tags and <br> tags to standard <br>
       let processedText = text.replace(/<p>/gi, '').replace(/<\/p>/gi, '<br>');
       if (processedText.endsWith('<br>')) {
         processedText = processedText.slice(0, -4);
@@ -834,7 +872,6 @@ function downloadResultImage() {
       const paragraphs = processedText.split('<br>');
       let currentY = y;
       paragraphs.forEach((paragraph) => {
-        // Strip any remaining html tags to prevent them from rendering on canvas
         const cleanParagraph = paragraph.replace(/<\/?[^>]+(>|$)/g, "");
         const chars = cleanParagraph.split('');
         let line = '';
@@ -852,39 +889,43 @@ function downloadResultImage() {
         currentY += lineHeight;
       });
     };
-    wrapText(`"${globalMatchedResult.description}"`, 540, 790, 700, 52);
+    wrapText(descText, 540, 790, 700, 52);
 
     // 7. Seme/Uke percentage bar section
     const semeVal = Math.round(globalSemePercent);
     const ukeVal = 100 - semeVal;
 
+    // Shift the Seme/Uke section dynamically down based on the box height
+    const boxEnd = 660 + boxHeight;
+    const y_meter = boxEnd + 40;
+
     // Seme Label (Left)
     ctx.textAlign = 'left';
     ctx.fillStyle = '#265199'; // var(--color-seme-dark)
     ctx.font = `700 28px ${FONT_TITLE}`;
-    ctx.fillText('♂ เมะ (Seme)', 140, 1110);
+    ctx.fillText('♂ เมะ (Seme)', 140, y_meter + 30);
 
     // Uke Label (Right)
     ctx.textAlign = 'right';
     ctx.fillStyle = '#d44e7c'; // var(--color-uke-dark)
-    ctx.fillText('♀ เคะ (Uke)', 940, 1110);
+    ctx.fillText('♀ เคะ (Uke)', 940, y_meter + 30);
 
     // Bar background (Pink: var(--color-uke))
     ctx.textAlign = 'center';
-    drawRoundRect(140, 1140, 800, 28, 14, '#f08daf');
+    drawRoundRect(140, y_meter + 60, 800, 28, 14, '#f08daf');
 
     // Bar foreground (Blue: var(--color-seme))
     const semeWidth = Math.max((semeVal / 100) * 800, 15);
-    drawRoundRect(140, 1140, semeWidth, 28, 14, '#9cb5d1');
+    drawRoundRect(140, y_meter + 60, semeWidth, 28, 14, '#9cb5d1');
 
     // Percentage ticks below the bar
     ctx.textAlign = 'left';
     ctx.fillStyle = '#52608c'; // var(--color-text-muted)
     ctx.font = `700 24px ${FONT_TITLE}`;
-    ctx.fillText(`เมะ (Seme): ${semeVal}%`, 140, 1210);
+    ctx.fillText(`เมะ (Seme): ${semeVal}%`, 140, y_meter + 130);
 
     ctx.textAlign = 'right';
-    ctx.fillText(`เคะ (Uke): ${ukeVal}%`, 940, 1210);
+    ctx.fillText(`เคะ (Uke): ${ukeVal}%`, 940, y_meter + 130);
 
     // 8. Sharing URL Link at the bottom of the card
     ctx.textAlign = 'center';
