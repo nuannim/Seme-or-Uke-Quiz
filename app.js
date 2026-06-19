@@ -705,22 +705,27 @@ function downloadResultImage() {
   const FONT_TITLE = '"Google Sans", "IBM Plex Sans Thai", sans-serif';
 
   document.fonts.ready.then(() => {
-    // 1. Draw background gradient
-    const gradient = ctx.createLinearGradient(0, 0, 0, 1920);
-    gradient.addColorStop(0, '#E2EEFF');
-    gradient.addColorStop(0.5, '#FFF0F2');
-    gradient.addColorStop(1, '#FFE6EA');
-    ctx.fillStyle = gradient;
+    // 1. Draw solid background color matching the webpage
+    ctx.fillStyle = '#c5d8ed';
     ctx.fillRect(0, 0, 1080, 1920);
 
-    // 2. Soft glow spots
-    ctx.fillStyle = 'rgba(134, 179, 252, 0.45)';
+    // 2. Soft glow spots matching body::before and body::after
+    // Seme Blue Light (#9cb5d1) Glow on Top-Left
+    const glow1 = ctx.createRadialGradient(150, 350, 0, 150, 350, 600);
+    glow1.addColorStop(0, 'rgba(156, 181, 209, 0.5)');
+    glow1.addColorStop(1, 'rgba(156, 181, 209, 0)');
+    ctx.fillStyle = glow1;
     ctx.beginPath();
-    ctx.arc(150, 350, 400, 0, Math.PI * 2);
+    ctx.arc(150, 350, 600, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = 'rgba(255, 158, 170, 0.45)';
+
+    // Uke Pink Light (#f08daf) Glow on Bottom-Right
+    const glow2 = ctx.createRadialGradient(930, 1570, 0, 930, 1570, 600);
+    glow2.addColorStop(0, 'rgba(240, 141, 175, 0.5)');
+    glow2.addColorStop(1, 'rgba(240, 141, 175, 0)');
+    ctx.fillStyle = glow2;
     ctx.beginPath();
-    ctx.arc(930, 1570, 400, 0, Math.PI * 2);
+    ctx.arc(930, 1570, 600, 0, Math.PI * 2);
     ctx.fill();
 
     // Helper: rounded rect
@@ -744,70 +749,46 @@ function downloadResultImage() {
       ctx.restore();
     };
 
-    // 3. Main card
-    drawRoundRect(90, 200, 900, 1520, 60, '#FFFFFF', {
+    // 3. Main white card (representing results-card container)
+    drawRoundRect(90, 300, 900, 1320, 60, '#FFFFFF', {
       color: 'rgba(15, 23, 42, 0.08)', blur: 50, ox: 0, oy: 20
     });
 
-    // 4. Seme bubble
-    const semeGrad = ctx.createLinearGradient(430, 320, 530, 420);
-    semeGrad.addColorStop(0, '#86B3FC');
-    semeGrad.addColorStop(1, '#3B82F6');
-    ctx.fillStyle = semeGrad;
-    ctx.beginPath();
-    ctx.arc(480, 380, 65, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = `bold 50px ${FONT_TITLE}`;
+    // 4. Branding Header at the top of the card
+    ctx.fillStyle = '#52608c'; // var(--color-text-muted)
+    ctx.font = `700 28px ${FONT_TITLE}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('\u2642', 480, 378);
+    ctx.fillText('SEME or UKE QUIZ', 540, 390);
 
-    // 4b. Uke bubble
-    const ukeGrad = ctx.createLinearGradient(550, 320, 650, 420);
-    ukeGrad.addColorStop(0, '#FF9EAA');
-    ukeGrad.addColorStop(1, '#EC4899');
-    ctx.fillStyle = ukeGrad;
-    ctx.beginPath();
-    ctx.arc(600, 380, 65, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillText('\u2640', 600, 378);
-
-    // 5. Subtitle
-    ctx.fillStyle = '#475569';
-    ctx.font = `700 30px ${FONT_TITLE}`;
-    ctx.fillText('SEME or UKE QUIZ', 540, 510);
-
-    ctx.fillStyle = '#0F172A';
-    ctx.font = `700 46px ${FONT_TITLE}`;
-    ctx.fillText('\u0e41\u0e1a\u0e1a\u0e17\u0e14\u0e2a\u0e2d\u0e1a\u0e42\u0e1e\u0e0b\u0e34\u0e0a\u0e31\u0e48\u0e19\u0e02\u0e2d\u0e07\u0e04\u0e38\u0e13', 540, 575);
-
-    // 6. Badge (Commented out as badge-wrapper is removed)
-    /*
-    let badgeText = '';
-    let badgeBg = '';
-    let badgeFg = '';
-    if (globalMatchedResult.min === 0)  { badgeText = '\ud83c\udf38 \u0e40\u0e04\u0e30\u0e15\u0e31\u0e27\u0e41\u0e21\u0e48'; badgeBg = '#FCE7F3'; badgeFg = '#9D174D'; }
-    else if (globalMatchedResult.min === 21) { badgeText = '\ud83d\udc97 \u0e40\u0e04\u0e30'; badgeBg = '#FCE7F3'; badgeFg = '#9D174D'; }
-    else if (globalMatchedResult.min === 41) { badgeText = '\u2696\ufe0f \u0e2a\u0e25\u0e31\u0e1a\u0e42\u0e1e'; badgeBg = '#EDE9FE'; badgeFg = '#5B21B6'; }
-    else if (globalMatchedResult.min === 60) { badgeText = '\ud83d\udc99 \u0e40\u0e21\u0e30'; badgeBg = '#DBEAFE'; badgeFg = '#1E40AF'; }
-    else { badgeText = '\ud83d\udd25 \u0e40\u0e21\u0e30\u0e15\u0e31\u0e27\u0e1e\u0e48\u0e2d'; badgeBg = '#DBEAFE'; badgeFg = '#1E40AF'; }
-
-    drawRoundRect(540 - 200, 640, 400, 86, 43, badgeBg);
-    ctx.fillStyle = badgeFg;
+    ctx.fillStyle = '#2d395e'; // var(--color-text-main)
     ctx.font = `700 38px ${FONT_TITLE}`;
-    ctx.fillText(badgeText, 540, 686);
-    */
+    ctx.fillText('แบบทดสอบตัวตนของคุณ', 540, 450);
 
-    // 7. Result title
-    ctx.fillStyle = '#0F172A';
-    ctx.font = `700 54px ${FONT_TITLE}`;
-    ctx.fillText(globalMatchedResult.title, 540, 790);
+    // Divider line inside the card
+    ctx.strokeStyle = 'rgba(15, 23, 42, 0.08)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(180, 500);
+    ctx.lineTo(900, 500);
+    ctx.stroke();
 
-    // 8. Description (with wrap)
-    ctx.fillStyle = '#0F172A';
-    ctx.font = `600 34px ${FONT_TITLE}`;
+    // 5. Result title (e.g. 🩷 เคะ)
+    ctx.fillStyle = '#2d395e'; // var(--color-text-main)
+    ctx.font = `700 68px ${FONT_TITLE}`;
+    ctx.fillText(globalMatchedResult.title, 540, 590);
+
+    // 6. Description Box (representing result-description-card)
+    drawRoundRect(140, 660, 800, 380, 24, '#f7f6fb'); // var(--color-bg-base)
+
+    // "คำวิเคราะห์ตัวตน" label inside the description card
+    ctx.fillStyle = '#52608c'; // var(--color-text-muted)
+    ctx.font = `700 24px ${FONT_TITLE}`;
+    ctx.fillText('คำวิเคราะห์ตัวตน', 540, 720);
+
+    // Description text (with wrap)
+    ctx.fillStyle = '#2d395e'; // var(--color-text-main)
+    ctx.font = `600 32px ${FONT_TITLE}`;
     const wrapText = (text, x, y, maxWidth, lineHeight) => {
       const chars = text.split('');
       let line = '';
@@ -823,35 +804,53 @@ function downloadResultImage() {
       }
       ctx.fillText(line, x, y);
     };
-    drawRoundRect(140, 848, 800, 200, 24, '#F8FAFC');
-    wrapText(`"${globalMatchedResult.description}"`, 540, 910, 700, 52);
+    wrapText(`"${globalMatchedResult.description}"`, 540, 790, 700, 52);
 
-    // 9. Seme/Uke percentage bar
+    // 7. Seme/Uke percentage bar section
     const semeVal = Math.round(globalSemePercent);
     const ukeVal = 100 - semeVal;
 
+    // Seme Label (Left)
     ctx.textAlign = 'left';
-    ctx.fillStyle = '#3B82F6';
-    ctx.font = `700 30px ${FONT_TITLE}`;
-    ctx.fillText(`\u0e40\u0e21\u0e30 (Seme): ${semeVal}%`, 140, 1110);
+    ctx.fillStyle = '#265199'; // var(--color-seme-dark)
+    ctx.font = `700 28px ${FONT_TITLE}`;
+    ctx.fillText('♂ เมะ (Seme)', 140, 1110);
+
+    // Uke Label (Right)
     ctx.textAlign = 'right';
-    ctx.fillStyle = '#EC4899';
-    ctx.fillText(`\u0e40\u0e04\u0e30 (Uke): ${ukeVal}%`, 940, 1110);
+    ctx.fillStyle = '#d44e7c'; // var(--color-uke-dark)
+    ctx.fillText('♀ เคะ (Uke)', 940, 1110);
 
+    // Bar background (Pink: var(--color-uke))
     ctx.textAlign = 'center';
-    drawRoundRect(140, 1135, 800, 28, 14, '#F3F4F6');
+    drawRoundRect(140, 1140, 800, 28, 14, '#f08daf');
+
+    // Bar foreground (Blue: var(--color-seme))
     const semeWidth = Math.max((semeVal / 100) * 800, 15);
-    const semeGradFill = ctx.createLinearGradient(140, 0, 140 + semeWidth, 0);
-    semeGradFill.addColorStop(0, '#86B3FC');
-    semeGradFill.addColorStop(1, '#3B82F6');
-    drawRoundRect(140, 1135, semeWidth, 28, 14, semeGradFill);
+    drawRoundRect(140, 1140, semeWidth, 28, 14, '#9cb5d1');
 
-    // 10. Footer
-    ctx.fillStyle = '#475569';
+    // Percentage ticks below the bar
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#52608c'; // var(--color-text-muted)
+    ctx.font = `700 24px ${FONT_TITLE}`;
+    ctx.fillText(`เมะ (Seme): ${semeVal}%`, 140, 1210);
+
+    ctx.textAlign = 'right';
+    ctx.fillText(`เคะ (Uke): ${ukeVal}%`, 940, 1210);
+
+    // 8. Sharing URL Link at the bottom of the card
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#52608c';
+    ctx.font = `600 22px ${FONT_TITLE}`;
+    const playDomain = window.location.host || 'positiontest.thebeus.com';
+    ctx.fillText(`เล่นได้ที่: ${playDomain}`, 540, 1530);
+
+    // 9. Footer (outside the white card)
+    ctx.fillStyle = '#52608c';
     ctx.font = `600 26px ${FONT_TITLE}`;
-    ctx.fillText('Seme \u0026 Uke Personality Test \u00a9 2026', 540, 1820);
+    ctx.fillText('Seme & Uke Personality Test © 2026', 540, 1820);
 
-    // 11. Download
+    // 10. Trigger Download
     canvas.toBlob((blob) => {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
