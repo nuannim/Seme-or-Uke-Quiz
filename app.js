@@ -4,6 +4,7 @@ let qna = [];
 let results = [];
 let songs = [];
 let selectedSong = null;
+let currentSongIndex = 0;
 
 let currentQuestionIndex = 0;
 let userAnswers = [];
@@ -302,6 +303,40 @@ async function init() {
     }
     showResults();
   });
+  const miniPlayBtn = document.getElementById('mini-play-btn');
+  if (miniPlayBtn) {
+    miniPlayBtn.addEventListener('click', () => {
+      if (!ytPlayer) return;
+      try {
+        const state = ytPlayer.getPlayerState();
+        if (state === 1) { // PLAYING
+          ytPlayer.pauseVideo();
+        } else {
+          ytPlayer.playVideo();
+        }
+      } catch (e) {
+        console.error("Mini player error:", e);
+      }
+    });
+  }
+
+  const prevSongBtn = document.getElementById('prev-song-btn');
+  if (prevSongBtn) {
+    prevSongBtn.addEventListener('click', () => {
+      if (songs.length === 0) return;
+      const newIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+      loadAndPlaySong(newIndex);
+    });
+  }
+
+  const nextSongBtn = document.getElementById('next-song-btn');
+  if (nextSongBtn) {
+    nextSongBtn.addEventListener('click', () => {
+      if (songs.length === 0) return;
+      const newIndex = (currentSongIndex + 1) % songs.length;
+      loadAndPlaySong(newIndex);
+    });
+  }
 }
 
 // Show specific app section with transition classes
@@ -388,12 +423,118 @@ function extractVideoId(iframeStr) {
   return match ? match[1] : null;
 }
 
+// Helper to update mini player controls state
+function updateMiniPlayerState(state) {
+  const miniPlayBtn = document.getElementById('mini-play-btn');
+  if (!miniPlayBtn) return;
+  const playIcon = miniPlayBtn.querySelector('.play-icon');
+  const pauseIcon = miniPlayBtn.querySelector('.pause-icon');
+  
+  if (state === 1) { // PLAYING
+    playIcon.style.display = 'none';
+    pauseIcon.style.display = 'block';
+  } else {
+    // PAUSED, ENDED, CUED, UNSTARTED, etc.
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+  }
+}
+
+// Helper to load and play a song by its index
+function loadAndPlaySong(index) {
+  if (songs.length === 0) return;
+  currentSongIndex = index;
+  selectedSong = songs[currentSongIndex];
+  if (!selectedSong) return;
+
+  const videoId = extractVideoId(selectedSong.url) || 'g3RrDbY7FEk';
+
+  // Populate song info card details
+  const songCover = document.getElementById('song-cover');
+  const songTitle = document.getElementById('song-title');
+  const songArtist = document.getElementById('song-artist');
+  if (songCover) {
+    songCover.src = selectedSong['artist-cover-url'] || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    songCover.alt = selectedSong.title || 'Cover';
+  }
+  if (songTitle) songTitle.innerText = selectedSong.title || '';
+  if (songArtist) songArtist.innerText = selectedSong.artist || '';
+
+  // Destroy previous player state if it exists
+  if (ytPlayer) {
+    try {
+      ytPlayer.destroy();
+      ytPlayer = null;
+    } catch (e) {
+      console.error("Error destroying YT player:", e);
+    }
+  }
+
+  updateMiniPlayerState(-1); // Reset play icon
+
+  // Initialize YT Player
+  if (ytApiReady) {
+    try {
+      ytPlayer = new YT.Player('yt-player', {
+        height: '100%',
+        width: '100%',
+        videoId: videoId,
+        playerVars: {
+          'autoplay': 1,
+          'playsinline': 1,
+          'controls': 1,
+          'rel': 0,
+          'modestbranding': 1
+        },
+        events: {
+          'onReady': (event) => {
+            event.target.playVideo();
+          },
+          'onStateChange': (event) => {
+            updateMiniPlayerState(event.data);
+          }
+        }
+      });
+    } catch (e) {
+      console.error("YT Player init error:", e);
+    }
+  } else {
+    // API not ready yet — will load player when ready
+    window.onYouTubeIframeAPIReady = function() {
+      ytApiReady = true;
+      try {
+        ytPlayer = new YT.Player('yt-player', {
+          height: '100%',
+          width: '100%',
+          videoId: videoId,
+          playerVars: {
+            'autoplay': 1,
+            'playsinline': 1,
+            'controls': 1,
+            'rel': 0,
+            'modestbranding': 1
+          },
+          events: {
+            'onReady': (event) => {
+              event.target.playVideo();
+            },
+            'onStateChange': (event) => {
+              updateMiniPlayerState(event.data);
+            }
+          }
+        });
+      } catch (e) { console.error(e); }
+    };
+  }
+}
+
 // Clear timers and video player state
 function clearPlaybackState() {
   if (playTimerInterval) {
     clearInterval(playTimerInterval);
     playTimerInterval = null;
   }
+  updateMiniPlayerState(-1); // Reset play icon
   if (ytPlayer) {
     try {
       ytPlayer.destroy();
@@ -408,33 +549,23 @@ function clearPlaybackState() {
 function startLoadingResults() {
   showSection(resultSection);
   
-  // Select random song
-  const randIndex = Math.floor(Math.random() * songs.length);
-  selectedSong = songs[randIndex];
-  
-  const videoId = extractVideoId(selectedSong.url) || 'g3RrDbY7FEk';
-  
   // Reset container width and layout transition classes
   document.querySelector('.app-container').classList.remove('expanded');
   document.getElementById('result-layout').classList.remove('show-results-layout');
 
-  // Populate song info card details
+  // Load and play a random song
+  const randIndex = Math.floor(Math.random() * songs.length);
+  loadAndPlaySong(randIndex);
+
+  // Set up songInfoCard visibility
   const songInfoCard = document.getElementById('song-info-card');
-  const songCover = document.getElementById('song-cover');
-  const songTitle = document.getElementById('song-title');
-  const songArtist = document.getElementById('song-artist');
-  if (songInfoCard && selectedSong) {
-    // Use artist-cover-url from song.js (local file path or URL)
-    songCover.src = selectedSong['artist-cover-url'] || `https://img.youtube.com/vi/${extractVideoId(selectedSong.url) || 'g3RrDbY7FEk'}/hqdefault.jpg`;
-    songCover.alt = selectedSong.title || 'Cover';
-    songTitle.innerText = selectedSong.title || '';
-    songArtist.innerText = selectedSong.artist || '';
-    // Reset animation so entrance plays fresh every time
+  if (songInfoCard) {
     songInfoCard.style.animation = 'none';
     songInfoCard.style.display = 'flex';
     void songInfoCard.offsetWidth; // trigger reflow
     songInfoCard.style.animation = '';
   }
+
   document.getElementById('result-loading-header').style.display = 'block';
   document.getElementById('result-loading-status').style.display = 'block';
   
@@ -451,59 +582,33 @@ function startLoadingResults() {
   if (playTimerInterval) clearInterval(playTimerInterval);
   playTimerInterval = null;
   
-  // Auto-start countdown immediately — no need to wait for video to play
+  // Progress countdown timer — only advances when video is actively playing!
   const targetSeconds = 8;
   playTimerInterval = setInterval(() => {
-    playTimeCounter += 1;
-    const percent = Math.min((playTimeCounter / targetSeconds) * 100, 100);
-    progressFill.style.width = `${percent}%`;
-    loadingMessage.innerText = `กำลังคำนวณและวิเคราะห์จิตวิทยาความเป็นคุณ... ✨`;
-    if (playTimeCounter >= targetSeconds) {
-      clearInterval(playTimerInterval);
-      playTimerInterval = null;
-      showResults();
+    let isPlaying = false;
+    if (ytPlayer) {
+      try {
+        isPlaying = (ytPlayer.getPlayerState() === 1); // 1 = PLAYING
+      } catch (e) {
+        // Player might not be ready yet
+      }
+    }
+
+    if (isPlaying) {
+      playTimeCounter += 1;
+      const percent = Math.min((playTimeCounter / targetSeconds) * 100, 100);
+      progressFill.style.width = `${percent}%`;
+      loadingMessage.innerText = `กำลังคำนวณและวิเคราะห์จิตวิทยาความเป็นคุณ... ✨`;
+      if (playTimeCounter >= targetSeconds) {
+        clearInterval(playTimerInterval);
+        playTimerInterval = null;
+        showResults();
+      }
+    } else {
+      // Pause progress and ask user to play music
+      loadingMessage.innerText = `กรุณาเล่นเพลงด้านบน เพื่อเริ่มวิเคราะห์ผลลัพธ์... 🎵`;
     }
   }, 1000);
-
-  // Initialize YT Player with Autoplay — plays in background for view boosting
-  if (ytApiReady) {
-    try {
-      ytPlayer = new YT.Player('yt-player', {
-        height: '100%',
-        width: '100%',
-        videoId: videoId,
-        playerVars: {
-          'autoplay': 1,
-          'controls': 1,
-          'rel': 0,
-          'modestbranding': 1
-        },
-        events: {
-          'onReady': (event) => {
-            event.target.playVideo();
-          }
-          // No onStateChange — timer runs independently, not tied to video state
-        }
-      });
-    } catch (e) {
-      console.error("YT Player init error:", e);
-      // Timer already running, no fallback needed
-    }
-  } else {
-    // API not ready yet — timer already counting, player will load when ready
-    window.onYouTubeIframeAPIReady = function() {
-      ytApiReady = true;
-      try {
-        ytPlayer = new YT.Player('yt-player', {
-          height: '100%',
-          width: '100%',
-          videoId: videoId,
-          playerVars: { 'autoplay': 1, 'controls': 1, 'rel': 0, 'modestbranding': 1 },
-          events: { 'onReady': (e) => e.target.playVideo() }
-        });
-      } catch (e) { console.error(e); }
-    };
-  }
 }
 
 
