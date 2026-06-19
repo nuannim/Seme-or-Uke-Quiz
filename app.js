@@ -229,11 +229,11 @@ async function init() {
       },
       {
         "id": 17,
-        "question": "เมื่อเปิดคลิปเต้น T-POP/K-POP แดนซ์ชาเลนจ์",
+        "question": "เมื่อกำลังกินก๋วยเตี๋ยวอยู่ แล้วพบว่าคนที่ชอบนั่งอยู่โต๊ะข้าง ๆ",
         "choices": [
-          { "id": "A", "text": "แกะท่าหน้ากระจก เต้นพริ้ว ยิ้มโปรยเสน่ห์", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "นั่งโยกหัวตามจังหวะ ขยับมือเบา ๆ พอเป็นพิธี", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "ยืนกอดอกดูแล้ววิเคราะห์ \"อืม... ไลน์เต้นแข็งแรงดี\"", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "ก้มหน้ากินต่อ ทำเป็นไม่เห็น 😳", "seme": 0, "uke": 2 },
+          { "id": "B", "text": "แอบมองเป็นระยะ ๆ แต่ไม่กล้าเข้าไปคุย", "seme": 1, "uke": 1 },
+          { "id": "C", "text": "เดินไปทัก \"บังเอิญจัง มากินร้านนี้เหมือนกันเหรอ\"", "seme": 2, "uke": 0 }
         ]
       },
       {
@@ -277,14 +277,14 @@ async function init() {
         "url": '<iframe width="560" height="315" src="https://www.youtube.com/embed/g3RrDbY7FEk?si=GO8JV2oORGf0F2gg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
         "title": "Ponytail to Shushu",
         "artist": "BNK48",
-        "artist-cover-url": "/images/BNK48_PonytailToShushu.webp"
+        "artist-cover-url": "images/BNK48_PonytailToShushu.webp"
       },
       {
         "id": 2,
         "url": '<iframe width="560" height="315" src="https://www.youtube.com/embed/HpQ9B13uv0w?si=zswoTGo6J4grw4i_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
         "title": "Sky Lantern Wish",
         "artist": "BNK48",
-        "artist-cover-url": "/images/BNK48_SkyLanternWish.jpg"
+        "artist-cover-url": "images/BNK48_SkyLanternWish.jpg"
       }
     ];
   }

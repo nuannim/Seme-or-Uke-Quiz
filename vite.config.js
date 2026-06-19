@@ -13,7 +13,7 @@ export default defineConfig({
         // Intercept requests for data JS files that are actually pure JSON
         // They live in the /data/ folder
         if (filename === 'data/qna.js' || filename === 'data/result.js' || filename === 'data/song.js') {
-          const filePath = path.resolve(process.cwd(), filename);
+          const filePath = path.resolve(process.cwd(), 'public', filename);
           if (fs.existsSync(filePath)) {
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             res.end(fs.readFileSync(filePath, 'utf-8'));

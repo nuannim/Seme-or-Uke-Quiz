@@ -71,6 +71,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: var(--font-body);
   font-optical-sizing: auto;
@@ -82,7 +90,6 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow-x: hidden;
   line-height: 1.6;
   
   /* Dreamy gradient background */
