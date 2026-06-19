@@ -55,9 +55,9 @@ async function init() {
   // Load data files
   try {
     const [qnaRes, resultsRes, songsRes] = await Promise.all([
-      fetch('data/qna.js'),
-      fetch('data/result.js'),
-      fetch('data/song.js')
+      fetch(`data/qna.js?_=${Date.now()}`),
+      fetch(`data/result.js?_=${Date.now()}`),
+      fetch(`data/song.js?_=${Date.now()}`)
     ]);
     
     const qnaText = await qnaRes.text();

@@ -1,13 +1,13 @@
 /* CSS Variables for Premium High-Contrast Soft Design */
 :root {
-  --color-seme: #86B3FC;      /* Seme Blue */
-  --color-seme-dark: #3B82F6; /* High-contrast blue */
-  --color-uke: #FF9EAA;       /* Uke Pink */
-  --color-uke-dark: #EC4899;  /* High-contrast pink */
-  --color-switch: #8B5CF6;    /* High-contrast purple */
-  --color-text-main: #0F172A; /* Slate 900 (High contrast) */
-  --color-text-muted: #475569; /* Slate 600 (High contrast) */
-  --color-bg-base: #F8FAFC;
+  --color-seme: #9cb5d1;      /* Seme Blue (Light) */
+  --color-seme-dark: #265199; /* Seme Blue (Dark) */
+  --color-uke: #f08daf;       /* Uke Pink (Light) */
+  --color-uke-dark: #d44e7c;  /* Uke Pink (Dark) */
+  --color-switch: #8b7ca6;    /* Switch Purple */
+  --color-text-main: #2d395e; /* Ponytail to Shushu Dark Blue */
+  --color-text-muted: #52608c; /* Ponytail to Shushu Muted Blue */
+  --color-bg-base: #f7f6fb;   /* Not-that-white */
   
   --font-title: 'Google Sans', 'IBM Plex Sans Thai', sans-serif;
   --font-body: 'Google Sans', 'IBM Plex Sans Thai', sans-serif;
@@ -92,8 +92,13 @@ body {
   position: relative;
   line-height: 1.6;
   
-  /* Dreamy gradient background */
-  background: linear-gradient(135deg, #E2EEFF 0%, #FFF0F2 50%, #FFE6EA 100%);
+  /* Polka Dot background pattern */
+  background-color: var(--color-bg-base);
+  background-image: 
+    radial-gradient(rgba(156, 181, 209, 0.35) 15%, transparent 16%),
+    radial-gradient(rgba(240, 141, 175, 0.35) 15%, transparent 16%);
+  background-size: 45px 45px;
+  background-position: 0 0, 22.5px 22.5px;
 }
 
 /* Subtle background glowing spots to feel premium */
@@ -105,20 +110,20 @@ body::before, body::after {
   border-radius: 50%;
   filter: blur(160px);
   z-index: 0;
-  opacity: 0.55;
+  opacity: 0.3;
   pointer-events: none;
 }
 
 body::before {
   top: 8%;
   left: 3%;
-  background-color: rgba(134, 179, 252, 0.4);
+  background-color: rgba(156, 181, 209, 0.4);
 }
 
 body::after {
   bottom: 8%;
   right: 3%;
-  background-color: rgba(255, 158, 170, 0.4);
+  background-color: rgba(240, 141, 175, 0.4);
 }
 
 /* App Layout Container */
@@ -726,7 +731,7 @@ footer {
 
   /* Override mobile max-height transitions for desktop width transitions */
   .results-card {
-    max-height: none;
+    max-height: 0; /* Prevents vertical wrapping from stretching page height during load */
     max-width: 0;
     width: 0;
     opacity: 0;
@@ -735,6 +740,7 @@ footer {
     visibility: hidden;
     transition: max-width 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
                 width 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                max-height 0.8s cubic-bezier(0.16, 1, 0.3, 1),
                 opacity 0.6s ease, 
                 padding 0.8s cubic-bezier(0.16, 1, 0.3, 1),
                 visibility 0.8s;
@@ -743,6 +749,7 @@ footer {
   .app-container.expanded .results-card {
     flex: 1.2;
     max-width: 600px;
+    max-height: 2000px;
     width: 100%;
     opacity: 1;
     padding: 40px 28px;

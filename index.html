@@ -136,8 +136,20 @@
           
           <div class="meter-section">
             <div class="meter-labels">
-              <span class="label-seme">💙 เมะ (Seme)</span>
-              <span class="label-uke">🌸 เคะ (Uke)</span>
+              <span class="label-seme" style="display: inline-flex; align-items: center; gap: 4px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="10" cy="14" r="5"></circle>
+                  <path d="M19 5h-5M19 5v5M19 5l-5.5 5.5"></path>
+                </svg>
+                เมะ (Seme)
+              </span>
+              <span class="label-uke" style="display: inline-flex; align-items: center; gap: 4px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="9" r="5"></circle>
+                  <path d="M12 14v7M9 18h6"></path>
+                </svg>
+                เคะ (Uke)
+              </span>
             </div>
             <div class="percentage-bar">
               <div id="seme-bar" class="percentage-fill-seme"></div>
@@ -150,14 +162,26 @@
 
           <!-- Result Action Buttons -->
           <div id="result-actions-box" class="result-actions" style="margin-top: 20px;">
-            <button id="download-btn" class="modern-btn">
-              📸 บันทึกรูปลง Story (9:16)
+            <button id="download-btn" class="modern-btn" style="gap: 8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              บันทึกรูปลง Story (9:16)
             </button>
-            <button id="copy-btn" class="modern-btn btn-secondary">
-              📋 คัดลอกลิงก์ผลลัพธ์
+            <button id="copy-btn" class="modern-btn btn-secondary" style="gap: 8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              คัดลอกลิงก์ผลลัพธ์
             </button>
-            <button id="restart-btn" class="modern-btn btn-secondary">
-              🔄 ทำแบบทดสอบอีกครั้ง
+            <button id="restart-btn" class="modern-btn btn-secondary" style="gap: 8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg>
+              ทำแบบทดสอบอีกครั้ง
             </button>
           </div>
         </div>
