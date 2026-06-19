@@ -337,6 +337,18 @@ async function init() {
       loadAndPlaySong(newIndex);
     });
   }
+
+  const videoOverlay = document.querySelector('.video-overlay');
+  if (videoOverlay) {
+    videoOverlay.addEventListener('click', redirectToYoutube);
+    videoOverlay.style.cursor = 'pointer';
+  }
+
+  const songCover = document.getElementById('song-cover');
+  if (songCover) {
+    songCover.addEventListener('click', redirectToYoutube);
+    songCover.style.cursor = 'pointer';
+  }
 }
 
 // Show specific app section with transition classes
@@ -441,7 +453,7 @@ function updateMiniPlayerState(state) {
 }
 
 // Helper to load and play a song by its index
-function loadAndPlaySong(index) {
+function loadAndPlaySong(index, shouldAutoplay = true) {
   if (songs.length === 0) return;
   currentSongIndex = index;
   selectedSong = songs[currentSongIndex];
@@ -480,7 +492,7 @@ function loadAndPlaySong(index) {
         width: '100%',
         videoId: videoId,
         playerVars: {
-          'autoplay': 1,
+          'autoplay': shouldAutoplay ? 1 : 0,
           'playsinline': 1,
           'controls': 1,
           'rel': 0,
@@ -488,7 +500,9 @@ function loadAndPlaySong(index) {
         },
         events: {
           'onReady': (event) => {
-            event.target.playVideo();
+            if (shouldAutoplay) {
+              event.target.playVideo();
+            }
           },
           'onStateChange': (event) => {
             updateMiniPlayerState(event.data);
@@ -508,7 +522,7 @@ function loadAndPlaySong(index) {
           width: '100%',
           videoId: videoId,
           playerVars: {
-            'autoplay': 1,
+            'autoplay': shouldAutoplay ? 1 : 0,
             'playsinline': 1,
             'controls': 1,
             'rel': 0,
@@ -516,7 +530,9 @@ function loadAndPlaySong(index) {
           },
           events: {
             'onReady': (event) => {
-              event.target.playVideo();
+              if (shouldAutoplay) {
+                event.target.playVideo();
+              }
             },
             'onStateChange': (event) => {
               updateMiniPlayerState(event.data);
@@ -553,17 +569,20 @@ function startLoadingResults() {
   document.querySelector('.app-container').classList.remove('expanded');
   document.getElementById('result-layout').classList.remove('show-results-layout');
 
-  // Load and play a random song
+  // Load a random song but DO NOT autoplay
   const randIndex = Math.floor(Math.random() * songs.length);
-  loadAndPlaySong(randIndex);
+  loadAndPlaySong(randIndex, false);
 
-  // Set up songInfoCard visibility
+  // Hide songInfoCard (miniplayer) completely during loading
   const songInfoCard = document.getElementById('song-info-card');
   if (songInfoCard) {
-    songInfoCard.style.animation = 'none';
-    songInfoCard.style.display = 'flex';
-    void songInfoCard.offsetWidth; // trigger reflow
-    songInfoCard.style.animation = '';
+    songInfoCard.style.display = 'none';
+  }
+
+  // Hide the video-overlay to allow direct click interaction on the YouTube player iframe
+  const videoOverlay = document.querySelector('.video-overlay');
+  if (videoOverlay) {
+    videoOverlay.style.display = 'none';
   }
 
   document.getElementById('result-loading-header').style.display = 'block';
@@ -632,7 +651,8 @@ function showResults() {
   globalSemePercent = semePercentage;
 
   // Match result criteria
-  const matchedResult = results.find(res => semePercentage >= res.min && semePercentage <= res.max) || results[2];
+  const semePercentageRounded = Math.round(semePercentage);
+  const matchedResult = results.find(res => semePercentageRounded >= res.min && semePercentageRounded <= res.max) || results[2];
   globalMatchedResult = matchedResult;
 
   // Configure Badge appearance (Commented out as badge-wrapper is removed)
@@ -658,7 +678,7 @@ function showResults() {
 
   // Populate data
   resultTitleEl.innerText = matchedResult.title;
-  resultDescriptionEl.innerText = matchedResult.description;
+  resultDescriptionEl.innerHTML = matchedResult.description;
   
   // Set percentage bar widths and text
   semeBarEl.style.width = `${semePercentage}%`;
@@ -675,6 +695,18 @@ function showResults() {
   // Trigger container width and layout animation classes to shift the playing video to the side/below
   document.querySelector('.app-container').classList.add('expanded');
   document.getElementById('result-layout').classList.add('show-results-layout');
+
+  // Reveal miniplayer card (song-info-card) on the results screen
+  const songInfoCard = document.getElementById('song-info-card');
+  if (songInfoCard) {
+    songInfoCard.style.display = 'flex';
+  }
+
+  // Restore the video-overlay to lock direct interaction on the iframe
+  const videoOverlay = document.querySelector('.video-overlay');
+  if (videoOverlay) {
+    videoOverlay.style.display = 'block';
+  }
 
   showSection(resultSection);
 }
@@ -790,19 +822,35 @@ function downloadResultImage() {
     ctx.fillStyle = '#2d395e'; // var(--color-text-main)
     ctx.font = `600 32px ${FONT_TITLE}`;
     const wrapText = (text, x, y, maxWidth, lineHeight) => {
-      const chars = text.split('');
-      let line = '';
-      for (let n = 0; n < chars.length; n++) {
-        const testLine = line + chars[n];
-        if (ctx.measureText(testLine).width > maxWidth && n > 0) {
-          ctx.fillText(line, x, y);
-          line = chars[n];
-          y += lineHeight;
-        } else {
-          line = testLine;
-        }
+      // Normalize <p> tags and <br> tags to standard <br>
+      let processedText = text.replace(/<p>/gi, '').replace(/<\/p>/gi, '<br>');
+      if (processedText.endsWith('<br>')) {
+        processedText = processedText.slice(0, -4);
       }
-      ctx.fillText(line, x, y);
+      if (processedText.endsWith('<br>"')) {
+        processedText = processedText.slice(0, -5) + '"';
+      }
+      
+      const paragraphs = processedText.split('<br>');
+      let currentY = y;
+      paragraphs.forEach((paragraph) => {
+        // Strip any remaining html tags to prevent them from rendering on canvas
+        const cleanParagraph = paragraph.replace(/<\/?[^>]+(>|$)/g, "");
+        const chars = cleanParagraph.split('');
+        let line = '';
+        for (let n = 0; n < chars.length; n++) {
+          const testLine = line + chars[n];
+          if (ctx.measureText(testLine).width > maxWidth && n > 0) {
+            ctx.fillText(line, x, currentY);
+            line = chars[n];
+            currentY += lineHeight;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line, x, currentY);
+        currentY += lineHeight;
+      });
     };
     wrapText(`"${globalMatchedResult.description}"`, 540, 790, 700, 52);
 
@@ -883,6 +931,18 @@ function restartQuiz() {
   if (songInfoCard) songInfoCard.style.display = 'none';
   
   showSection(introSection);
+}
+
+// Redirect to YouTube dynamically based on current song
+function redirectToYoutube() {
+  const isResultsVisible = document.getElementById('result-layout').classList.contains('show-results-layout');
+  if (!isResultsVisible) return;
+
+  if (selectedSong) {
+    const videoId = extractVideoId(selectedSong.url) || 'g3RrDbY7FEk';
+    const youtubeUrl = `https://youtu.be/${videoId}?si=Jku4RhPVZH2Vt3CV`;
+    window.open(youtubeUrl, '_blank');
+  }
 }
 
 // Run app init
