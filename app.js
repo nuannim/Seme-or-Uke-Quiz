@@ -595,6 +595,7 @@ function startLoadingResults() {
   loadingMessage.innerText = "กำลังคำนวณและวิเคราะห์จิตวิทยาความเป็นคุณ... 🔮";
   progressContainer.style.display = 'block';
   progressFill.style.width = '0%';
+  progressFill.style.transition = 'width 0.1s linear'; // Make width animation smooth at 100ms intervals
   skipContainer.style.display = 'none';
   playTimeCounter = 0;
   
@@ -602,7 +603,7 @@ function startLoadingResults() {
   playTimerInterval = null;
   
   // Progress countdown timer — only advances when video is actively playing!
-  const targetSeconds = 8;
+  const targetSeconds = 8.0;
   playTimerInterval = setInterval(() => {
     let isPlaying = false;
     if (ytPlayer) {
@@ -614,10 +615,31 @@ function startLoadingResults() {
     }
 
     if (isPlaying) {
-      playTimeCounter += 1;
-      const percent = Math.min((playTimeCounter / targetSeconds) * 100, 100);
+      playTimeCounter = Math.round((playTimeCounter + 0.1) * 10) / 10;
+      
+      // Calculate dynamic progress bar percentage with double suspense curve
+      let percent = 0;
+      if (playTimeCounter <= 5.0) {
+        // Phase 1: Smoothly runs to 75% over 5 seconds
+        percent = (playTimeCounter / 5.0) * 75;
+      } else if (playTimeCounter <= 5.5) {
+        // Phase 2: First pause at 5s (keeps 75% for 0.5s)
+        percent = 75;
+      } else if (playTimeCounter <= 6.0) {
+        // Phase 3: Move during 5.5s - 6.0s (from 75% to 85%)
+        percent = 75 + ((playTimeCounter - 5.5) / 0.5) * 10;
+      } else if (playTimeCounter <= 7.0) {
+        // Phase 4: Second pause at 6s (keeps 85% for 1.0s)
+        percent = 85;
+      } else {
+        // Phase 5: Smooth run from 7s to 8s (from 85% to 100%)
+        percent = 85 + ((playTimeCounter - 7.0) / 1.0) * 15;
+      }
+      
+      percent = Math.min(percent, 100);
       progressFill.style.width = `${percent}%`;
       loadingMessage.innerText = `กำลังคำนวณและวิเคราะห์จิตวิทยาความเป็นคุณ... ✨`;
+      
       if (playTimeCounter >= targetSeconds) {
         clearInterval(playTimerInterval);
         playTimerInterval = null;
@@ -627,7 +649,7 @@ function startLoadingResults() {
       // Pause progress and ask user to play music
       loadingMessage.innerText = `กรุณาเล่นเพลงด้านบน เพื่อเริ่มวิเคราะห์ผลลัพธ์... 🎵`;
     }
-  }, 1000);
+  }, 100);
 }
 
 
