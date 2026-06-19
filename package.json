@@ -1,0 +1,13 @@
+{
+  "name": "personal-test-webapp",
+  "version": "1.0.0",
+  "description": "Seme vs Uke Personality Test",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  }
+}
