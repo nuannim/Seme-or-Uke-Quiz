@@ -217,12 +217,14 @@ body::after {
   z-index: 1;
 }
 
-.position-bubbles:hover .bubble-seme {
-  transform: translateX(-6px) scale(1.06);
-}
+@media (hover: hover) {
+  .position-bubbles:hover .bubble-seme {
+    transform: translateX(-6px) scale(1.06);
+  }
 
-.position-bubbles:hover .bubble-uke {
-  transform: translateX(6px) scale(1.06);
+  .position-bubbles:hover .bubble-uke {
+    transform: translateX(6px) scale(1.06);
+  }
 }
 
 /* Typography styles */
@@ -283,9 +285,11 @@ body::after {
   box-shadow: 0 8px 24px -5px rgba(236, 72, 153, 0.35);
 }
 
-.modern-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px -5px rgba(236, 72, 153, 0.45);
+@media (hover: hover) {
+  .modern-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -5px rgba(236, 72, 153, 0.45);
+  }
 }
 
 .modern-btn:active {
@@ -299,10 +303,12 @@ body::after {
   box-shadow: none;
 }
 
-.btn-secondary:hover {
-  background: rgba(15, 23, 42, 0.09);
-  box-shadow: 0 6px 15px rgba(15, 23, 42, 0.05);
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .btn-secondary:hover {
+    background: rgba(15, 23, 42, 0.09);
+    box-shadow: 0 6px 15px rgba(15, 23, 42, 0.05);
+    transform: translateY(-2px);
+  }
 }
 
 /* Quiz Screen Styling */
@@ -374,11 +380,13 @@ body::after {
   gap: 12px;
 }
 
-.choice-item:hover {
-  background-color: var(--color-bg-base);
-  border-color: var(--color-text-main);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+@media (hover: hover) {
+  .choice-item:hover {
+    background-color: var(--color-bg-base);
+    border-color: var(--color-text-main);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+  }
 }
 
 .choice-item:active {
@@ -402,10 +410,12 @@ body::after {
   transition: all 0.2s ease;
 }
 
-.choice-item:hover .choice-badge {
-  background: var(--color-seme-dark);
-  border-color: var(--color-seme-dark);
-  color: #FFFFFF;
+@media (hover: hover) {
+  .choice-item:hover .choice-badge {
+    background: var(--color-seme-dark);
+    border-color: var(--color-seme-dark);
+    color: #FFFFFF;
+  }
 }
 
 /* YouTube Video Wrapper (Responsive 16:9) */
@@ -651,9 +661,11 @@ footer {
   outline: none;
 }
 
-.control-btn:hover {
-  opacity: 1;
-  transform: scale(1.15);
+@media (hover: hover) {
+  .control-btn:hover {
+    opacity: 1;
+    transform: scale(1.15);
+  }
 }
 
 .control-btn:active {
