@@ -47,7 +47,7 @@ tag.src = "https://www.youtube.com/iframe_api";
 const firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-window.onYouTubeIframeAPIReady = function() {
+window.onYouTubeIframeAPIReady = function () {
   ytApiReady = true;
 };
 
@@ -56,15 +56,15 @@ async function init() {
   // Load data files
   try {
     const [qnaRes, resultsRes, songsRes] = await Promise.all([
-      fetch(`data/qna.js?_=${Date.now()}`),
+      fetch(`data/qna3.js?_=${Date.now()}`),
       fetch(`data/result.js?_=${Date.now()}`),
       fetch(`data/song.js?_=${Date.now()}`)
     ]);
-    
+
     const qnaText = await qnaRes.text();
     const resultsText = await resultsRes.text();
     const songsText = await songsRes.text();
-    
+
     // Strip JS-style // comments and Vite sourcemap comments so the file parses as valid JSON
     const cleanJson = (text) => {
       return text
@@ -76,7 +76,7 @@ async function init() {
         .join('\n')
         .trim();
     };
-    
+
     qna = JSON.parse(cleanJson(qnaText));
     results = JSON.parse(cleanJson(resultsText));
     songs = JSON.parse(cleanJson(songsText));
@@ -86,182 +86,202 @@ async function init() {
     qna = [
       {
         "id": 1,
-        "question": "คนที่ชอบส่งข้อความมาว่า \"นอนยัง\"",
+        "question": "คนที่ชอบส่งข้อความมาว่า \"นอนยัง\" จะตอบว่า...",
         "choices": [
-          { "id": "A", "text": "ยังครับ มีไรครับ 😳", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "ยัง ๆ ว่าไงงง", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "ปล่อยไว้ 2 ชั่วโมงแล้วค่อยตอบ", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "ยังครับ มีไรครับ 😳", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "ยัง ๆ ว่าไงงง", "seme": 1, "uke": 2 },
+          { "id": "C", "text": "ปล่อยไว้ 2 ชั่วโมงแล้วค่อยตอบ", "seme": 2, "uke": 1 },
+          { "id": "D", "text": "ยังครับ รอเธอทักมาอยู่พอดีเลย โทรคุยกันไหม?", "seme": 3, "uke": 0 }
         ]
       },
       {
         "id": 2,
-        "question": "เวลาเดินเข้าร้านอาหารกับเพื่อน",
+        "question": "เวลาเดินเข้าร้านอาหารกับเพื่อน คุณเป็นคนประเภทไหน",
         "choices": [
-          { "id": "A", "text": "กินอะไรก็ได้", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "ร้านนี้ก็ดีนะ", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "ตามข้ามา ข้าจองไว้แล้ว", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "กินอะไรก็ได้", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "ร้านนี้ก็ดีนะ", "seme": 2, "uke": 1 },
+          { "id": "C", "text": "ตามข้ามา ข้าจองไว้แล้ว", "seme": 3, "uke": 0 },
+          { "id": "D", "text": "กินอะไรก็ได้ตามใจเลยจ้า แล้วแต่ทุกคนเลย", "seme": 1, "uke": 2 }
         ]
       },
       {
         "id": 3,
-        "question": "ถ้ามีคนเอาหัวมาซบไหล่",
+        "question": "ถ้ามีคนเอาหัวมาซบไหล่ คุณจะ...",
         "choices": [
-          { "id": "A", "text": "ตัวแข็งเป็นหิน", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "ซบได้ตามสบาย", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "ดึงเข้ามาใกล้อีกนิด", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "ตัวแข็งเป็นหิน", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "ซบได้ตามสบาย", "seme": 2, "uke": 1 },
+          { "id": "C", "text": "ดึงเข้ามาใกล้อีกนิด", "seme": 3, "uke": 0 },
+          { "id": "D", "text": "เอียงหัวไปพิงกลับเบา ๆ แก้เขิน", "seme": 1, "uke": 2 }
         ]
       },
       {
         "id": 4,
-        "question": "เวลาเจอหมาในซอยเห่าใส่",
+        "question": "เวลาเจอหมาในซอยเห่าใส่ คุณจะ...",
         "choices": [
-          { "id": "A", "text": "หลบหลังเพื่อน", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "เดินผ่านปกติ", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "จ้องกลับ ใครกลัวก่อนแพ้", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "หลบหลังเพื่อน", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "เดินผ่านปกติ", "seme": 2, "uke": 1 },
+          { "id": "C", "text": "จ้องกลับ ใครกลัวก่อนแพ้", "seme": 3, "uke": 0 },
+          { "id": "D", "text": "สะดุ้งแล้วเดินเลี่ยง ๆ แบบแอบกลัวอยู่เงียบ ๆ", "seme": 1, "uke": 2 }
         ]
       },
       {
         "id": 5,
-        "question": "ถ้ามีคนถามว่า \"คิดถึงไหม\"",
+        "question": "ถ้ามีคนถามว่า \"คิดถึงไหม\" จะตอบว่า...",
         "choices": [
-          { "id": "A", "text": "คิดถึง 🥺", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "ก็คิดถึงแหละ", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "ทำไม ถ้าบอกว่าคิดถึงจะทำไร", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "คิดถึง 🥺", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "ก็คิดถึงแหละ", "seme": 1, "uke": 2 },
+          { "id": "C", "text": "ทำไม ถ้าบอกว่าคิดถึงจะทำไร", "seme": 2, "uke": 1 },
+          { "id": "D", "text": "คิดถึงสิ เดี๋ยวออกไปหาตอนนี้เลยไหมล่ะ?", "seme": 3, "uke": 0 }
         ]
       },
       {
         "id": 6,
-        "question": "เวลาถ่ายรูปหมู่",
+        "question": "เวลาถ่ายรูปหมู่ คุณจะ...",
         "choices": [
-          { "id": "A", "text": "ยืนริมสุด", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "ยืนตรงไหนก็ได้", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "ยืนกลางรูปแบบไม่ได้นัดหมาย", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "ยืนริมสุด", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "ยืนตรงไหนก็ได้", "seme": 1, "uke": 2 },
+          { "id": "C", "text": "ยืนกลางรูปแบบไม่ได้นัดหมาย", "seme": 2, "uke": 1 },
+          { "id": "D", "text": "จัดระเบียบโพสท่าให้ทุกคน แล้วอาสาเป็นคนถือกล้องเซลฟี่เอง", "seme": 3, "uke": 0 }
         ]
       },
       {
         "id": 7,
-        "question": "ถ้ามีคนบอกว่า \"ดูแลตัวเองดี ๆ นะ\"",
+        "question": "ถ้ามีคนบอกว่า \"ดูแลตัวเองดี ๆ นะ\" จะตอบว่า...",
         "choices": [
-          { "id": "A", "text": "เขินทั้งวัน", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "ตอบขอบคุณ", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "เอ็งก็ดูแลตัวเองด้วย", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "เขินทั้งวัน", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "ตอบขอบคุณ", "seme": 1, "uke": 2 },
+          { "id": "C", "text": "เอ็งก็ดูแลตัวเองด้วย", "seme": 2, "uke": 1 },
+          { "id": "D", "text": "ถ้าเป็นห่วงจริง ๆ ก็มาช่วยดูแลใกล้ ๆ สิ 😉", "seme": 3, "uke": 0 }
         ]
       },
       {
         "id": 8,
-        "question": "เวลาขึ้นรถไฟฟ้าคนแน่น",
+        "question": "คุณต้องการลงรถไฟฟ้าสถานีนี้ แต่คนแน่นมากจนเดินออกไปไม่ได้ คุณจะ...",
         "choices": [
-          { "id": "A", "text": "ขอทางไม่เป็น", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "ค่อย ๆ แทรกไป", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "ขอทางครับ แล้วพุ่งตรงสู่ประตู", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "เงียบ ขอทางไม่เป็น", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "ค่อย ๆ แทรกไป", "seme": 1, "uke": 2 },
+          { "id": "C", "text": "ขอทางครับ แล้วพุ่งตรงสู่ประตู", "seme": 2, "uke": 1 },
+          { "id": "D", "text": "จับมืออีกฝ่ายไว้แน่นแล้วเดินนำเพื่อพาฝ่าฝูงคนออกไปด้วยกัน", "seme": 3, "uke": 0 }
         ]
       },
       {
         "id": 9,
-        "question": "ถ้าคนที่ชอบบอกว่า \"หิว\"",
+        "question": "ถ้าคนที่ชอบบอกว่า \"หิว\" คุณจะพูดว่า...",
         "choices": [
-          { "id": "A", "text": "โอ๋ ๆ", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "ไปหาอะไรกินกัน", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "เดี๋ยวซื้อให้", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "โอ๋ ๆ", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "ไปหาอะไรกินกัน", "seme": 1, "uke": 2 },
+          { "id": "C", "text": "เดี๋ยวซื้อให้", "seme": 2, "uke": 1 },
+          { "id": "D", "text": "อยู่เฉย ๆ เลย เดี๋ยวสั่งของโปรดไปส่งให้ถึงที่เดี๋ยวนี้แหละ", "seme": 3, "uke": 0 }
         ]
       },
       {
         "id": 10,
-        "question": "ถ้าโลกกำลังจะแตกในอีก 10 นาที",
+        "question": "ถ้าโลกกำลังจะแตกในอีก 10 นาที จะทำอะไร",
         "choices": [
-          { "id": "A", "text": "โทรหาคนที่ชอบ", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "นั่งดูพระอาทิตย์ตก", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "ไปหาคนที่ชอบถึงหน้าบ้าน", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "โทรหาคนที่ชอบ", "seme": 2, "uke": 1 },
+          { "id": "B", "text": "นั่งดูพระอาทิตย์ตก", "seme": 1, "uke": 2 },
+          { "id": "C", "text": "ไปหาคนที่ชอบถึงหน้าบ้าน", "seme": 3, "uke": 0 },
+          { "id": "D", "text": "กอดเข่าร้องไห้ฟูมฟายทำอะไรไม่ถูกด้วยความกลัว", "seme": 0, "uke": 3 }
         ]
       },
       {
         "id": 11,
-        "question": "เมื่อเดินสะดุดขาตัวเองล้มต่อหน้าคนที่ชอบ",
+        "question": "เมื่อเดินสะดุดขาตัวเองล้มต่อหน้าคนที่ชอบ คุณจะ...",
         "choices": [
-          { "id": "A", "text": "นั่งจุ้มปุ้กอยู่ที่พื้น ทำตาแป๋วรอน้ำตาคลอเบ้า", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "รีบลุกขึ้นมาปัดฝุ่นแล้วบอก \"ไม่เจ็บ ๆ ขำ ๆ อะ\"", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "โพสท่าโพเดียมแล้วบอก \"พื้นมันอยากกอดฉันน่ะ\"", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "นั่งจุ้มปุ้กอยู่ที่พื้น ทำตาแป๋วรอน้ำตาคลอเบ้า", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "รีบลุกขึ้นมาปัดฝุ่นแล้วบอก \"ไม่เจ็บ ๆ ขำ ๆ อะ\"", "seme": 2, "uke": 1 },
+          { "id": "C", "text": "โพสท่าโพเดียมแล้วบอก \"พื้นมันอยากกอดฉันน่ะ\"", "seme": 3, "uke": 0 },
+          { "id": "D", "text": "รีบเนียนลุกขึ้นมาแล้วรีบหนีไปทางอื่น", "seme": 1, "uke": 2 }
         ]
       },
       {
         "id": 12,
-        "question": "เวลาสั่งชานมไข่มุกแล้วร้านให้หลอดมาอันเดียว",
+        "question": "เวลาสั่งชานมไข่มุกแล้วร้านให้หลอดมาอันเดียว คุณจะ...",
         "choices": [
-          { "id": "A", "text": "ส่งแก้วให้เขาเจาะ แล้วเราค่อยขอดูดต่อแบบเนียน ๆ", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "เดินไปขอหลอดเพิ่มที่เคาน์เตอร์ดิ รออะไร", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "เจาะปึ้ง! กินก่อนคำนึงแล้วยื่นหลอดเดิมเข้าปากเขา", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "ส่งแก้วให้เขาเจาะ แล้วเราค่อยขอดูดต่อแบบเนียน ๆ", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "เดินไปขอหลอดเพิ่มที่เคาน์เตอร์ดิ รออะไร", "seme": 3, "uke": 0 },
+          { "id": "C", "text": "เจาะปึ้ง! กินก่อนคำนึงแล้วยื่นหลอดเดิมเข้าปากเขา", "seme": 1, "uke": 2 },
+          { "id": "D", "text": "เดินไปหยิบหลอดใหม่มาเจาะให้เขาดื่มก่อน", "seme": 2, "uke": 1 }
         ]
       },
       {
         "id": 13,
-        "question": "ถ้าโดนทักว่า \"ช่วงนี้อ้วนขึ้นป่ะเนี่ย\"",
+        "question": "ถ้าโดนทักว่า \"ช่วงนี้อ้วนขึ้นป่ะเนี่ย\" จะตอบว่า...",
         "choices": [
-          { "id": "A", "text": "เอามือจับแก้มตัวเองแล้วทำหน้ามุ่ย \"งดหมูกระทะละ!\"", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "ก็กินดีอยู่ดีอ่ะ มีไรป่ะ", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "อ้วนตรงไหน บีบดูดิ... หรือจะลองอุ้มดูล่ะ?", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "เอามือจับแก้มตัวเองแล้วทำหน้ามุ่ย \"งดหมูกระทะละ!\"", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "ก็กินดีอยู่ดีอ่ะ มีไรป่ะ", "seme": 2, "uke": 1 },
+          { "id": "C", "text": "อ้วนตรงไหน บีบดูดิ... หรือจะลองอุ้มดูล่ะ?", "seme": 3, "uke": 0 },
+          { "id": "D", "text": "แงง จริงเหรอ เสียใจอะ", "seme": 1, "uke": 2 }
         ]
       },
       {
         "id": 14,
-        "question": "เมื่อมีคนมาจีบคนที่คุณชอบต่อหน้าต่อตา",
+        "question": "เมื่อมีคนมาจีบคนที่คุณชอบต่อหน้าต่อตา คุณจะ...",
         "choices": [
-          { "id": "A", "text": "ยืนกำหมัดแน่น หน้างอเป็นจิวเวอรี่ แอบฟึดฟัดคนเดียว", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "สะกิดคนของเราแล้วถาม \"ใครอ่ะ รู้จักเหรอ?\"", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "เดินไปโอบไหล่คนของเรา แล้วหันไปยิ้มให้คนจีบ \"ขอโทษทีครับ พอดีชิ้นนี้มีเจ้าของแล้ว\"", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "ยืนกำหมัดแน่น หน้างอเป็นจิวเวอรี่ แอบฟึดฟัดคนเดียว", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "สะกิดคนของเราแล้วถาม \"ใครอ่ะ รู้จักเหรอ?\"", "seme": 2, "uke": 1 },
+          { "id": "C", "text": "เดินไปโอบไหล่คนของเรา แล้วหันไปยิ้มให้คนจีบ \"ขอโทษทีครับ พอดีคนนี้มีเจ้าของแล้ว\"", "seme": 3, "uke": 0 },
+          { "id": "D", "text": "ดึงชายเสื้อคนของเราเบา ๆ ทำสายตาอ้อนให้เขาสนใจแต่เรา", "seme": 1, "uke": 2 }
         ]
       },
       {
         "id": 15,
-        "question": "จู่ ๆ ไฟดับมืดสนิททั้งบ้าน",
+        "question": "เมื่ออยู่กันสองต่อสอง แล้วจู่ ๆ ไฟดับมืดสนิททั้งบ้าน คุณจะ...",
         "choices": [
-          { "id": "A", "text": "กรีดร้องเบา ๆ แล้วคว้าแขนคนข้าง ๆ ไว้ก่อนเลย", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "เปิดแฟลชโทรศัพท์หาเทียนพรรษามาจุด", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "ดึงอีกฝ่ายเข้ามากอดแล้วกระซิบ \"ไม่ต้องกลัวนะ อยู่กับฉันปลอดภัยแน่นอน\"", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "สะดุ้ง แล้วคว้าแขนคนข้าง ๆ ไว้ก่อนเลย", "seme": 1, "uke": 2 },
+          { "id": "B", "text": "เปิดแฟลชโทรศัพท์หาเทียนพรรษามาจุด", "seme": 2, "uke": 1 },
+          { "id": "C", "text": "ดึงอีกฝ่ายเข้ามากอดแล้วกระซิบ \"ไม่ต้องกลัวนะ อยู่กับฉันปลอดภัยแน่นอน\"", "seme": 3, "uke": 0 },
+          { "id": "D", "text": "กรี๊ด", "seme": 0, "uke": 3 }
         ]
       },
       {
         "id": 16,
-        "question": "เวลานั่งดูหนังผีฉากตุ้งแช่ (Jump Scare)",
+        "question": "เวลานั่งดูหนังผีฉากตุ้งแช่ (Jump Scare) คุณจะ...",
         "choices": [
-          { "id": "A", "text": "เอาหมอนอิงอุดหน้า หรือมุดเข้าใต้แขนเสื้ออีกคน", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "สะดุ้งนิดหน่อยแล้วสบถ \"เชี่ย ผีหน้าตาตลกว่ะ\"", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "เอามือไปปิดตาให้อีกฝ่ายทันที \"กลัวล่ะสิ ไม่ต้องดูก็ได้นะ\"", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "เอาหมอนอิงอุดหน้า หรือมุดเข้าใต้แขนเสื้ออีกคน", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "สะดุ้งนิดหน่อยแล้วสบถ \"เชี่ย ผีหน้าตาตลกว่ะ\"", "seme": 2, "uke": 1 },
+          { "id": "C", "text": "เอามือไปปิดตาให้อีกฝ่ายทันที", "seme": 3, "uke": 0 },
+          { "id": "D", "text": "สะดุ้งสุดตัวแล้วรีบคว้ามือคนข้าง ๆ มาจับไว้แน่น", "seme": 1, "uke": 2 }
         ]
       },
       {
         "id": 17,
-        "question": "เมื่อกำลังกินก๋วยเตี๋ยวอยู่ แล้วพบว่าคนที่ชอบนั่งอยู่โต๊ะข้าง ๆ",
+        "question": "เมื่อกำลังกินก๋วยเตี๋ยวอยู่ แล้วพบว่าคนที่ชอบนั่งอยู่โต๊ะข้าง ๆ คุณจะ...",
         "choices": [
-          { "id": "A", "text": "ก้มหน้ากินต่อ ทำเป็นไม่เห็น 😳", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "แอบมองเป็นระยะ ๆ แต่ไม่กล้าเข้าไปคุย", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "เดินไปทัก \"บังเอิญจัง มากินร้านนี้เหมือนกันเหรอ\"", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "ก้มหน้ากินต่อ ทำเป็นไม่เห็น 😳", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "แอบมองเป็นระยะ ๆ แต่ไม่กล้าเข้าไปคุย", "seme": 1, "uke": 2 },
+          { "id": "C", "text": "เดินไปทัก \"บังเอิญจัง มากินร้านนี้เหมือนกันเหรอ\"", "seme": 2, "uke": 1 },
+          { "id": "D", "text": "แอบเช็คบิลให้โต๊ะเขา", "seme": 3, "uke": 0 }
         ]
       },
       {
         "id": 18,
         "question": "ถ้าต้องไปสวนสนุก เครื่องเล่นอันไหนที่คุณจะเลือก?",
         "choices": [
-          { "id": "A", "text": "ม้าหมุนฟรุ้งฟริ้ง หรือถ้วยหมุนชวนเวียนหัว", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "ล่องแก่งชิว ๆ พอได้เปียกสนุก ๆ", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "รถไฟเหาะตีลังกาความเร็วสูง แบบกูไม่ร้องไห้แน่นอน", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "ม้าหมุนฟรุ้งฟริ้ง หรือถ้วยหมุนชวนเวียนหัว", "seme": 1, "uke": 2 },
+          { "id": "B", "text": "ล่องแก่งชิว ๆ พอได้เปียกสนุก ๆ", "seme": 2, "uke": 1 },
+          { "id": "C", "text": "รถไฟเหาะตีลังกาความเร็วสูง di wa", "seme": 3, "uke": 0 },
+          { "id": "D", "text": "บ้านผีสิง... แต่อยากมีคนให้เดินจับมือเกาะแขนไปด้วยกัน", "seme": 0, "uke": 3 }
         ]
       },
       {
         "id": 19,
-        "question": "เวลาส่งสติกเกอร์ไลน์หาเพื่อนหรือคนที่ชอบ",
+        "question": "สติกเกอร์ไลน์แบบไหนที่คุณชอบใช้ส่งหาเพื่อนหรือคนที่ชอบ",
         "choices": [
-          { "id": "A", "text": "น้อนหมี น้อนแมว ดุ๊กดิ๊ก ตาโต แก้มชมพู", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "สติกเกอร์กวนตีน ๆ หรือหน้ามีมตลก ๆ", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "สติกเกอร์ทางการ หรือไม่ใช้เลย พิมพ์ข้อความจบ", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "น้อนหมี น้อนแมว ดุ๊กดิ๊ก ตาโต แก้มชมพู", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "สติกเกอร์กวนตีน ๆ หรือหน้ามีมตลก ๆ", "seme": 2, "uke": 1 },
+          { "id": "C", "text": "สติกเกอร์ทางการ หรือไม่ใช้เลย พิมพ์ข้อความจบ", "seme": 3, "uke": 0 },
+          { "id": "D", "text": "สติกเกอร์การ์ตูนน่ารัก ๆ ที่มีข้อความสั้น ๆ อย่าง 'โอเค' หรือ 'ขอบคุณ'", "seme": 1, "uke": 2 }
         ]
       },
       {
         "id": 20,
-        "question": "เมื่อมีคนเปิดประตูห้องน้ำมาเจอคุณกำลังอาบน้ำอยู่ (และไม่ได้ล็อกประตู)",
+        "question": "เมื่อมีคนเปิดประตูห้องน้ำมาเจอคุณกำลังอาบน้ำอยู่ (และไม่ได้ล็อกประตู) คุณจะ...",
         "choices": [
-          { "id": "A", "text": "กรีดร้อง นั่งยอง ๆ เอาขันปิดหน้าอก หน้าแดงแปร๊ด", "seme": 0, "uke": 2 },
-          { "id": "B", "text": "ตะโกนด่า \"เฮ้ย! ปิดประตูเซ่! ไม่มีตาเหรอ\"", "seme": 1, "uke": 1 },
-          { "id": "C", "text": "เสยผมเปียก ๆ ขึ้นหนึ่งที เสกสายตาเจ้าชู้แล้วพูด \"จะเข้ามาอาบด้วยกันเลยไหมล่ะ?\"", "seme": 2, "uke": 0 }
+          { "id": "A", "text": "กรี๊ด คว้าอะไรก็ได้มาปิดตรงนั้น หน้าแดงแปร๊ด", "seme": 0, "uke": 3 },
+          { "id": "B", "text": "ตะโกนด่า \"เฮ้ย! ปิดประตูเซ่! ไม่มีตาเหรอ\"", "seme": 2, "uke": 1 },
+          { "id": "C", "text": "เสยผมเปียก ๆ ขึ้นหนึ่งที เสกสายตาเจ้าชู้แล้วพูด \"จะเข้ามาอาบด้วยกันเลยไหมล่ะ?\"", "seme": 3, "uke": 0 },
+          { "id": "D", "text": "ยืนอึ้งทำตัวไม่ถูก รีบหันหลังหนีแล้วพูดอุบอิบว่า 'ช่วยออกไปและปิดประตูให้หน่อยได้ไหม...'", "seme": 1, "uke": 2 }
         ]
       }
     ];
@@ -386,11 +406,11 @@ function renderQuestion() {
   }
 
   const currentQ = qna[currentQuestionIndex];
-  
+
   // Progress calculations
   const progressRatio = currentQuestionIndex / qna.length;
   const progressPercent = Math.round(progressRatio * 100);
-  
+
   progressFillEl.style.width = `${progressPercent}%`;
   progressPercentEl.innerText = `${progressPercent}%`;
   questionNumberEl.innerText = `คำถามข้อที่ ${currentQuestionIndex + 1} / ${qna.length}`;
@@ -402,29 +422,29 @@ function renderQuestion() {
   shuffledChoices.forEach((choice, index) => {
     const choiceBtn = document.createElement('button');
     choiceBtn.className = 'choice-item';
-    
+
     const badge = document.createElement('span');
     badge.className = 'choice-badge';
     badge.innerText = String.fromCharCode(65 + index); // A, B, C...
-    
+
     const textSpan = document.createElement('span');
     textSpan.innerText = choice.text;
-    
+
     choiceBtn.appendChild(badge);
     choiceBtn.appendChild(textSpan);
-    
+
     // On click, transition to next question
     choiceBtn.addEventListener('click', () => {
       userAnswers.push(choice);
       currentQuestionIndex++;
-      
+
       // Brief delay so the user feels the selection feedback
       choiceBtn.style.transform = 'scale(0.95)';
       setTimeout(() => {
         renderQuestion();
       }, 200);
     });
-    
+
     choicesContainer.appendChild(choiceBtn);
   });
 }
@@ -441,7 +461,7 @@ function updateMiniPlayerState(state) {
   if (!miniPlayBtn) return;
   const playIcon = miniPlayBtn.querySelector('.play-icon');
   const pauseIcon = miniPlayBtn.querySelector('.pause-icon');
-  
+
   if (state === 1) { // PLAYING
     playIcon.style.display = 'none';
     pauseIcon.style.display = 'block';
@@ -514,7 +534,7 @@ function loadAndPlaySong(index, shouldAutoplay = true) {
     }
   } else {
     // API not ready yet — will load player when ready
-    window.onYouTubeIframeAPIReady = function() {
+    window.onYouTubeIframeAPIReady = function () {
       ytApiReady = true;
       try {
         ytPlayer = new YT.Player('yt-player', {
@@ -564,7 +584,7 @@ function clearPlaybackState() {
 // Start loading transition and play YouTube Video to progress
 function startLoadingResults() {
   showSection(resultSection);
-  
+
   // Reset container width and layout transition classes
   document.querySelector('.app-container').classList.remove('expanded');
   document.getElementById('result-layout').classList.remove('show-results-layout');
@@ -587,21 +607,21 @@ function startLoadingResults() {
 
   document.getElementById('result-loading-header').style.display = 'block';
   document.getElementById('result-loading-status').style.display = 'block';
-  
+
   const loadingMessage = document.getElementById('loading-message');
   const progressContainer = document.getElementById('video-progress-container');
   const progressFill = document.getElementById('video-progress-fill');
-  
+
   loadingMessage.innerText = "กำลังคำนวณและวิเคราะห์จิตวิทยาความเป็นคุณ... 🔮";
   progressContainer.style.display = 'block';
   progressFill.style.width = '0%';
   progressFill.style.transition = 'width 0.1s linear'; // Make width animation smooth at 100ms intervals
   skipContainer.style.display = 'none';
   playTimeCounter = 0;
-  
+
   if (playTimerInterval) clearInterval(playTimerInterval);
   playTimerInterval = null;
-  
+
   // Progress countdown timer — only advances when video is actively playing!
   const targetSeconds = 8.0;
   playTimerInterval = setInterval(() => {
@@ -616,7 +636,7 @@ function startLoadingResults() {
 
     if (isPlaying) {
       playTimeCounter = Math.round((playTimeCounter + 0.1) * 10) / 10;
-      
+
       // Calculate dynamic progress bar percentage with double suspense curve
       let percent = 0;
       if (playTimeCounter <= 5.0) {
@@ -635,11 +655,11 @@ function startLoadingResults() {
         // Phase 5: Smooth run from 7s to 8s (from 85% to 100%)
         percent = 85 + ((playTimeCounter - 7.0) / 1.0) * 15;
       }
-      
+
       percent = Math.min(percent, 100);
       progressFill.style.width = `${percent}%`;
       loadingMessage.innerText = `กำลังคำนวณและวิเคราะห์จิตวิทยาความเป็นคุณ... ✨`;
-      
+
       if (playTimeCounter >= targetSeconds) {
         clearInterval(playTimerInterval);
         playTimerInterval = null;
@@ -660,12 +680,12 @@ let globalMatchedResult = null;
 function showResults() {
   let totalSeme = 0;
   let totalUke = 0;
-  
+
   userAnswers.forEach(ans => {
     totalSeme += ans.seme || 0;
     totalUke += ans.uke || 0;
   });
-  
+
   const totalScore = totalSeme + totalUke;
   const semePercentage = totalScore === 0 ? 50 : (totalSeme / totalScore) * 100;
   const ukePercentage = 100 - semePercentage;
@@ -701,7 +721,7 @@ function showResults() {
   // Populate data
   resultTitleEl.innerText = matchedResult.title;
   resultDescriptionEl.innerHTML = matchedResult.description;
-  
+
   // Set percentage bar widths and text
   semeBarEl.style.width = `${semePercentage}%`;
   semePercentLabel.innerText = `เมะ (Seme): ${Math.round(semePercentage)}%`;
@@ -710,7 +730,7 @@ function showResults() {
   // Hide loading content
   document.getElementById('result-loading-header').style.display = 'none';
   document.getElementById('result-loading-status').style.display = 'none';
-  
+
   // Reveal predictions box on the left/top
   // (visibility and expansion managed smoothly by CSS classes)
 
@@ -841,7 +861,7 @@ function downloadResultImage() {
       if (processedText.endsWith('<br>"')) {
         processedText = processedText.slice(0, -5) + '"';
       }
-      
+
       const paragraphs = processedText.split('<br>');
       let linesCount = 0;
       paragraphs.forEach((paragraph, index) => {
@@ -890,7 +910,7 @@ function downloadResultImage() {
       if (processedText.endsWith('<br>"')) {
         processedText = processedText.slice(0, -5) + '"';
       }
-      
+
       const paragraphs = processedText.split('<br>');
       let currentY = y;
       paragraphs.forEach((paragraph) => {
@@ -984,15 +1004,15 @@ function restartQuiz() {
   clearPlaybackState();
   currentQuestionIndex = 0;
   userAnswers = [];
-  
+
   // Reset container widths and transition classes
   document.querySelector('.app-container').classList.remove('expanded');
   document.getElementById('result-layout').classList.remove('show-results-layout');
-  
+
   // Hide song info card
   const songInfoCard = document.getElementById('song-info-card');
   if (songInfoCard) songInfoCard.style.display = 'none';
-  
+
   showSection(introSection);
 }
 

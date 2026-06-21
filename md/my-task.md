@@ -33,3 +33,10 @@
 
 # task 8
 [] มันจะมีโอกาสที่เขาจะได้สลับโพใช่ไหม ต้องกดข้อไหนบ้ง ลองบอกมาที
+
+# task 9
+[x] ให้นายเข้าไปอ่านที่ [seme-uke-character.md](file;file:///c%3A/Users/noey/Desktop/personal-test-webapp/md/seme-uke-character.md) อ่านให้เข้าใน character จากนั้น นำมาเขียนแบบทดสอบใหม่ เป็นไฟล์ qna3.js โดยนำข้อจากไฟล์ [qna.js](file;file:///c%3A/Users/noey/Desktop/personal-test-webapp/public/data/qna.js) มา 
+- [x] เพิ่ม choice เข้าไปเป็น 4 choice โดยเอาข้อจาก [qna.js](file;file:///c%3A/Users/noey/Desktop/personal-test-webapp/public/data/qna.js) copy paste ใส่ไฟล์ใหม่ แล้วเพิ่มช้อยเอา เน้นให้ภาษาของช้อยใหม่เป็นภาษาพูดทีื่เป็นมนุษย์
+- [x] ให้คะแนนใหม่ เนื่องจากมี 4 ข้อ การคิดคะแนนจะต่างออกไป
+- [x] ตรวจสอบว่า ข้อไหนให้คะแนนเมะเคะไม่ตรงตามในอุดมคติ ให้เปลี่ยน ตรวจทั้งข้อเก่าและข้อใหม่ เพื่อ weight คะแนนใหม่
+- [x] ช่วงคะแนน เอาตามเดิมแหละ
