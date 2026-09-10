@@ -34,6 +34,32 @@ This reads `package-lock.json` and installs the only dependency, Vite, into a fr
 
 ### 3. Run it
 
+**Start with the dev server:**
+
+```sh
+npm run dev
+```
+
+This starts Vite's local dev server and prints a URL (e.g. `http://localhost:5173`) — open it in a browser. This is what you use for everyday editing; it auto-reloads on file changes. For just running the project again, this is usually the only command you need.
+
+**Only if you're deploying, build a production bundle:**
+
+```sh
+npm run build
+```
+
+This compiles everything into a `dist/` folder (e.g. to upload to Vercel or GitHub Pages). You don't need this for local development.
+
+**Then, to double-check the build before deploying:**
+
+```sh
+npm run preview
+```
+
+This serves the `dist/` folder you just built, locally, so you can confirm the production build actually works before pushing it live. Run this only after `npm run build`.
+
+**Quick reference:**
+
 | Command | What it does |
 |---|---|
 | `npm run dev` | Starts the local dev server (Vite prints the URL, e.g. `http://localhost:5173`). Use this for day-to-day editing. |
@@ -77,6 +103,32 @@ npm install
 คำสั่งนี้จะอ่านจาก `package-lock.json` แล้วติดตั้ง dependency เดียวที่โปรเจกต์ใช้คือ Vite ลงในโฟลเดอร์ `node_modules/` ใหม่
 
 ### 3. รันโปรเจกต์
+
+**เริ่มจากรัน dev server ก่อน:**
+
+```sh
+npm run dev
+```
+
+คำสั่งนี้จะรัน dev server ของ Vite ในเครื่อง แล้วขึ้น URL มาให้ (เช่น `http://localhost:5173`) เปิดลิงก์นั้นในเบราว์เซอร์ได้เลย ใช้คำสั่งนี้ตอนแก้โค้ดทั่วไป จะ auto-reload ให้อัตโนมัติเวลาแก้ไฟล์ ถ้าแค่อยากรันโปรเจกต์กลับมาเฉย ๆ ใช้แค่คำสั่งนี้คำสั่งเดียวก็พอ
+
+**ถ้าจะ deploy เท่านั้น ค่อย build เวอร์ชัน production:**
+
+```sh
+npm run build
+```
+
+คำสั่งนี้จะรวมไฟล์ทั้งหมดลงโฟลเดอร์ `dist/` (เอาไปอัปขึ้น Vercel หรือ GitHub Pages) ตอนพัฒนาในเครื่องปกติไม่ต้องใช้คำสั่งนี้
+
+**จากนั้น ถ้าอยากเช็คก่อน deploy จริง:**
+
+```sh
+npm run preview
+```
+
+คำสั่งนี้จะเปิดดูไฟล์ในโฟลเดอร์ `dist/` ที่เพิ่ง build เสร็จ ในเครื่อง เพื่อเช็คให้แน่ใจว่าเวอร์ชัน production ใช้งานได้จริงก่อนจะ deploy ขึ้นจริง ให้รันคำสั่งนี้หลังจาก `npm run build` เท่านั้น
+
+**สรุปคำสั่งภาพรวม:**
 
 | คำสั่ง | ใช้ทำอะไร |
 |---|---|
